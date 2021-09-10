@@ -285,13 +285,14 @@ public class ClickHouseConnection implements SQLConnection {
     }
 
     synchronized private NativeClient getHealthyNativeClient() throws SQLException {
-        NativeContext oldCtx = nativeCtx;
-        if (!oldCtx.nativeClient().ping(cfg.get().queryTimeout(), nativeCtx.serverCtx())) {
-            LOG.warn("connection loss with state[{}], create new connection and reset state", state);
-            nativeCtx = createNativeContext(cfg.get());
-            state.set(SessionState.IDLE);
-            oldCtx.nativeClient().silentDisconnect();
-        }
+        //直接不用PING, 容易出错
+//        NativeContext oldCtx = nativeCtx;
+//        if (!oldCtx.nativeClient().ping(cfg.get().queryTimeout(), nativeCtx.serverCtx())) {
+//            LOG.warn("connection loss with state[{}], create new connection and reset state", state);
+//            nativeCtx = createNativeContext(cfg.get());
+//            state.set(SessionState.IDLE);
+//            oldCtx.nativeClient().silentDisconnect();
+//        }
 
         return nativeCtx.nativeClient();
     }
